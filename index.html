@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 Інформаційний Буклет: Гуртожиток №2</title>
+    <style>
+        /* Базові стилі та шрифти */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #a8c0ff 0%, #3f72af 100%); /* Сучасний градієнтний фон */
+            color: #1a1a1a;
+            min-height: 100vh;
+            /* Додаємо відступ знизу для фіксованої навігації */
+            padding-bottom: 75px; 
+        }
+
+        /* HEADER STYLES */
+        header {
+            background: rgba(255, 255, 255, 0.15); /* Glassmorphism */
+            backdrop-filter: blur(8px);
+            color: #1a1a1a;
+            padding: 20px 10px;
+            text-align: center;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            position: sticky; /* Фіксуємо шапку зверху */
+            top: 0;
+            z-index: 100; /* Перекриває контент */
+        }
+
+        header h1 {
+            color: #004c97;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        /* NAVIGATION STYLES (Перенесено вниз) */
+        nav {
+            position: fixed; /* Фіксуємо меню внизу */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.85); /* Темний, майже прозорий фон */
+            backdrop-filter: blur(15px); /* Сильне розмиття для Glassmorphism */
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 200; /* Поверх усього */
+            padding: 5px 0 5px 0; /* Додаємо невеликий відступ */
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around; /* Рівномірний розподіл */
+            flex-wrap: nowrap;
+            overflow-x: auto; /* Дозволяємо горизонтальну прокрутку, якщо багато елементів */
+            padding: 0 5px;
+        }
+
+        nav li {
+            flex-shrink: 0; /* Не дозволяємо елементам стискатися */
+            text-align: center;
+        }
+        
+        nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f0f0f0;
+            text-align: center;
+            padding: 5px 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.7em; /* Менший шрифт для мобільного меню */
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        nav a span {
+            font-size: 1.5em; /* Розмір емодзі */
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        nav a:hover, nav a.active-nav {
+            color: #90caf9; /* Блакитний колір при активності */
+        }
+        
+        nav a.active-nav {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        /* GLASSMORHPISM CONTAINER STYLES */
+        .book-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 10px;
+            position: relative;
+        }
+
+        section {
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.2); /* Напівпрозорий "скляний" фон */
+            backdrop-filter: blur(10px); 
+            border-radius: 15px;
+            margin: 10px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); 
+            border: 1px solid rgba(255, 255, 255, 0.4); 
+            position: absolute; 
+            top: 0;
+            left: 0;
+            right: 0;
+            min-height: 500px;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px - 75px); /* Висота контенту: 100vh - header - nav height */
+            transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+        }
+        
+        /* Стилі для контенту (залишаємо як було) */
+        section:not(.active) {
+            display: none;
+        }
+        h2 {
+            color: #004c97;
+            border-bottom: 2px solid rgba(0, 76, 151, 0.2);
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        a {
+            color: #004c97;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover { color: #007bff; text-decoration: underline; }
+        
+        /* Ефект "перегортання" */
+        .page {
+             transform: perspective(1000px) rotateY(0deg);
+             opacity: 1;
+        }
+        .page.animating-out {
+            transform: perspective(1000px) rotateY(90deg);
+            opacity: 0;
+            display: block;
+        }
+        
+        /* ADAPTIVE STYLES */
+        @media (max-width: 768px) {
+            /* Переносимо прокрутку меню на мобільних для зручності */
+            nav ul {
+                justify-content: flex-start;
+                /* Якщо елементів не надто багато, можна залишити justify-content: space-around; */
+            }
+            nav a {
+                padding: 5px;
+            }
+            body {
+                padding-bottom: 70px;
+            }
+            section {
+                padding: 15px;
+                min-height: 400px;
+                max-height: calc(100vh - 120px - 70px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📖 Інформаційний Буклет: Гуртожиток №2</h1>
+        <p>📱💻 Адаптивний дизайн. Меню, зручне для мобільних пристроїв.</p>
+    </header>
+    
+    <div class="book-container">
+        <section id="manifest" class="page active">
+            <h2>📢 Маніфест-Інформація</h2>
+            <p><strong>✍️ Автор:</strong> @sadfyllbeat</p>
+            <p>🌸 Голова студентської ради ЧДТУ: <a href="http://t.me/taparrn" target="_blank">t.me/taparrn</a></p>
+            <h3>🌐 Офіційні Ресурси ЧДТУ</h3>
+            <ol>
+                <li>📃 Офіційний сайт-розклад: <a href="https://t1p.de/b6g3n" target="_blank">t1p.de/b6g3n</a></li>
+                <li>🌐 Застосунок "Студент ЧДТУ +": <a href="https://bit.ly/3MTKUrn" target="_blank">bit.ly/3MTKUrn</a></li>
+            </ol>
+            <p>⚡️ <strong>Примітка:</strong> Для перегляду розкладу в додатку необхідно вказати університет, назву групи/ПІБ викладача та дати.</p>
+            
+            <h3>💬 Чати та Факультети</h3>
+            <ul>
+                <li>🖥 ФІТІС: <a href="http://t.me/Antonina_Manzhura" target="_blank">t.me/Antonina_Manzhura</a></li>
+                <li>🏗 ФГТ: <a href="http://t.me/isoniichka" target="_blank">t.me/isoniichka</a></li>
+                <li>📊 ФЕУ: <a href="https://t.me/elizabet_yanovich" target="_blank">t.me/elizabet_yanovich</a></li>
+                <li>💙 Чат у Telegram: <a href="https://t.me/cstu_chat" target="_blank">t.me/cstu_chat</a></li>
+                <li>💜 Актуальні новини ЧДТУ: <a href="https://t.me/chdtu" target="_blank">t.me/chdtu</a></li>
+            </ul>
+            
+            <h3>📊 Рейтинг та Оцінювання</h3>
+            <p>📢 Середній бал за навчальні досягнення (СБ) * 0,9 = рейтинговий бал.</p>
+            <h4>Шкала оцінювання:</h4>
+            <ol>
+                <li>90-100 | A | - Відмінно</li>
+                <li>82-89 | B | - Дуже добре</li>
+                <li>74-81 | C | - Добре</li>
+                <li>64-73 | D | - Задовільно</li>
+            </ol>
+        </section>
+
+        <section id="dorm" class="page">
+            <h2>🏠 Гуртожиток №2</h2>
+            <p><strong>Адреса:</strong> вул. Чехова, 42, Черкаси, 18000</p>
+            <p>🤝 Чат Гуртожитку: <a href="https://t.me/+Xt0M854kxFA3NmVi" target="_blank">t.me/+Xt0M854kxFA3NmVi</a></p>
+            
+            <h3>Контакти:</h3>
+            <ul>
+                <li>Комендант (Дегтяренко Н.І.): 📱 <a href="tel:+380679845594">+380 67 984 5594</a></li>
+                <li>Голова студ. ради (Прудиус В.М.): 📱 <a href="tel:+380987504570">+380 98 750 4570</a></li>
+            </ul>
+
+            <h3>Розпорядок роботи плит:</h3>
+            <ul>
+                <li>7:00 – 9:00 (Працюють)</li>
+                <li>9:00 – 11:15 (Не працюють)</li>
+                <li>11:15 – 14:00 (Працюють)</li>
+                <li>15:00 – 23:00 (Працюють)</li>
+            </ul>
+        </section>
+
+        <section id="instagram" class="page">
+            <h2>📸 Наш Instagram</h2>
+            <p>Слідкуйте за оновленнями гуртожитку.</p>
+            <p>👉 Посилання: <a href="https://bit.ly/3N17gZC" target="_blank">bit.ly/3N17gZC</a></p>
+        </section>
+
+        <section id="bots" class="page">
+            <h2>🤖 Список Корисних Чат-Ботів</h2>
+            <p>Список корисних ботів для студентів ЧДТУ.</p>
+            <p>👉 Посилання на список: <a href="https://bit.ly/3VWLryt" target="_blank">bit.ly/3VWLryt</a></p>
+        </section>
+
+        <section id="channel" class="page">
+            <h2>📣 Канал Гуртожитку</h2>
+            <p>Актуальні новини та оголошення гуртожитку.</p>
+            <p>👉 Приєднатися: <a href="https://bit.ly/3Dop2ml" target="_blank">bit.ly/3Dop2ml</a></p>
+        </section>
+
+        <section id="documents" class="page">
+            <h2>📄 Зразки Документів та Заяв</h2>
+            <p>Завантажуйте необхідні зразки документів та заяв.</p>
+            <p>👉 Доступні в папці: <a href="http://surl.li/mhzpd" target="_blank">surl.li/mhzpd</a></p>
+        </section>
+
+        <section id="laundry" class="page">
+            <h2>🧺 Посилання на Прання</h2>
+            <p>Інформація про сервіс "Технопралка" у гуртожитку №2.</p>
+            <p>👉 Переглянути: <a href="https://technostirka.com/ch/point/chdtu2d12" target="_blank">technostirka.com/ch/point/chdtu2d12</a></p>
+        </section>
+
+        <section id="schedule" class="page">
+            <h2>🗓 Розклад Занять</h2>
+            <p>Отримайте розклад через Telegram бота.</p>
+            <p>👉 Використовуйте бота: <a href="https://t.me/cdu_rozklad_bot" target="_blank">t.me/cdu_rozklad_bot</a></p>
+        </section>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="#manifest" onclick="showPage('manifest', this)"><span>📢</span>Маніфест</a></li>
+            <li><a href="#dorm" onclick="showPage('dorm', this)"><span>🏠</span>Гуртожиток</a></li>
+            <li><a href="#instagram" onclick="showPage('instagram', this)"><span>📸</span>Instagram</a></li>
+            <li><a href="#bots" onclick="showPage('bots', this)"><span>🤖</span>Боти</a></li>
+            <li><a href="#channel" onclick="showPage('channel', this)"><span>📣</span>Канал</a></li>
+            <li><a href="#documents" onclick="showPage('documents', this)"><span>📄</span>Документи</a></li>
+            <li><a href="#laundry" onclick="showPage('laundry', this)"><span>🧺</span>Прання</a></li>
+            <li><a href="#schedule" onclick="showPage('schedule', this)"><span>🗓</span>Розклад</a></li>
+        </ul>
+    </nav>
+    
+    <script>
+        const navLinks = document.querySelectorAll('nav a');
+        const sections = document.querySelectorAll('.page');
+        let activeSectionId = 'manifest'; 
+
+        /**
+         * Перемикає активну сторінку з ефектом "перегортання".
+         */
+        function showPage(pageId, clickedElement) {
+            if (pageId === activeSectionId) {
+                return;
+            }
+
+            const oldActiveSection = document.getElementById(activeSectionId);
+            if (oldActiveSection) {
+                // 1. Анімація виходу
+                oldActiveSection.classList.add('animating-out');
+                
+                setTimeout(() => {
+                    oldActiveSection.classList.remove('active');
+                    oldActiveSection.classList.remove('animating-out');
+                    oldActiveSection.style.display = 'none';
+                    
+                    // 2. Анімація входу
+                    const newActiveSection = document.getElementById(pageId);
+                    if (newActiveSection) {
+                        sections.forEach(page => page.style.display = 'none'); // На всяк випадок
+                        newActiveSection.style.display = 'block';
+                        newActiveSection.classList.add('active');
+                        // Скидаємо transform, щоб спрацювала анімація входу (rotateY(0deg))
+                        newActiveSection.classList.remove('animating-out'); 
+                        
+                         // Прокручуємо до верхівки контейнера сторінок
+                         document.querySelector('.book-container').scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                }, 600); 
+            } else {
+                // Прямий перехід, якщо анімація не потрібна
+                sections.forEach(page => page.classList.remove('active'));
+                const newActiveSection = document.getElementById(pageId);
+                if (newActiveSection) {
+                    newActiveSection.classList.add('active');
+                }
+            }
+
+            // 3. Оновлюємо активний елемент навігації
+            navLinks.forEach(link => link.classList.remove('active-nav'));
+            if (clickedElement) {
+                clickedElement.classList.add('active-nav');
+            }
+
+            // 4. Оновлюємо стан
+            activeSectionId = pageId;
+            history.pushState(null, null, `#${pageId}`);
+        }
+        
+        // Ініціалізація
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialPageId = window.location.hash ? window.location.hash.substring(1) : 'manifest';
+            activeSectionId = initialPageId;
+            
+            sections.forEach(page => page.style.display = 'none');
+            
+            const initialPage = document.getElementById(initialPageId);
+            if(initialPage) {
+                initialPage.style.display = 'block';
+                initialPage.classList.add('active');
+            }
+            
+            const initialNavLink = document.querySelector(`nav a[href="#${initialPageId}"]`);
+            if (initialNavLink) {
+                initialNavLink.classList.add('active-nav');
+            }
+        });
+    </script>
+</body>
+</html>
